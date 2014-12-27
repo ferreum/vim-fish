@@ -5,27 +5,27 @@ function! fish#Indent()
     endif
     let l:indent = 0
     let l:prevline = getline(l:prevlnum)
-    let l:line = getline(v:lnum)
 
     if l:prevline =~# '\v^\s*%(begin|if|else|while|for|function|case|switch)>'
         let l:indent = &shiftwidth
     endif
-    let l:pplnum = prevnonblank(l:prevlnum - 1)
-    if l:pplnum ==# 0 || getline(l:pplnum) !~# '\\$'
-        " previous line is not a continued line
-        if l:prevline =~# '\\$'
-            " this line is a first continued line
-            let l:indent += &shiftwidth
-        endif
-    else
-        " previous line is a continued line
-        if l:prevline !~# '\\$'
-            " previous line does not continue
-            let l:indent -= &shiftwidth
-        endif
-    endif
-    if l:line =~# '\v^\s*%(case|else|end)>'
+    if getline(v:lnum) =~# '\v^\s*%(case|else|end)>'
         let l:indent -= &shiftwidth
+    endif
+    if v:lnum > 1
+        if v:lnum <= 2 || getline(v:lnum - 2) !~# '\\$'
+            " previous line is not a continued line
+            if l:prevlnum == v:lnum - 1 && l:prevline =~# '\\$'
+                " this line is a first continued line
+                let l:indent += &shiftwidth
+            endif
+        else
+            " previous line is a continued line
+            if l:prevlnum != v:lnum - 1 || l:prevline !~# '\\$'
+                " previous line does not continue
+                let l:indent -= &shiftwidth
+            endif
+        endif
     endif
     return indent(l:prevlnum) + l:indent
 endfunction
