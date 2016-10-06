@@ -19,11 +19,11 @@ syntax match fishEscapeDQuote /\\["$\\]/ contained
 syntax region fishString start=/'/ skip=/\\\\\|\\'/ end=/'/ contains=fishEscapeQuote
 syntax region fishString start=/"/ skip=/\\\\\|\\"/ end=/"/ contains=fishEscapeDQuote,fishIdentifier
 syntax match fishCharacter /\v\\[abefnrtv *?~%#(){}\[\]<>&;"']|\\[xX][0-9a-f]{1,2}|\\o[0-7]{1,2}|\\u[0-9a-f]{1,4}|\\U[0-9a-f]{1,8}|\\c[a-z]/
-syntax match fishStatement /[a-zA-Z0-9_-]\+/
-syntax match fishCommandSub /(\s*\zs[a-zA-Z0-9_-]\+/
+syntax match fishStatement /[a-zA-Z0-9/_.-]\+/
+syntax match fishCommandSub /(\s*\zs[a-zA-Z0-9/_.-]\+/
 
 syntax region fishLineContinuation matchgroup=fishStatement
-            \ start='[a-zA-Z0-9_-]\+' skip='\\$' end='$\|\ze[;|]'
+            \ start='[a-zA-Z0-9/_.-]\+' skip='\\$' end='$\|\ze[;|]'
             \ contains=fishSpecial,fishIdentifier,fishString,fishCharacter,fishCommandSub,fishComment
 
 highlight default link fishKeyword Keyword
