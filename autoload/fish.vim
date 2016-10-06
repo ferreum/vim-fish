@@ -13,7 +13,7 @@ function! fish#Indent()
         let l:indent -= &shiftwidth
     endif
     if v:lnum > 1
-        if v:lnum <= 2 || getline(v:lnum - 2) !~# '\\$'
+        if getline(l:prevlnum - 1) !~# '\\$'
             " previous line is not a continued line
             if l:prevlnum == v:lnum - 1 && l:prevline =~# '\\$'
                 " this line is a first continued line
