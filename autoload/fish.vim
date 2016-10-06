@@ -12,19 +12,17 @@ function! fish#Indent()
     if getline(v:lnum) =~# '\v^\s*%(case|else|end)>'
         let l:indent -= &shiftwidth
     endif
-    if v:lnum > 1
-        if getline(l:prevlnum - 1) !~# '\\$'
-            " previous line is not a continued line
-            if l:prevlnum == v:lnum - 1 && l:prevline =~# '\\$'
-                " this line is a first continued line
-                let l:indent += &shiftwidth
-            endif
-        else
-            " previous line is a continued line
-            if l:prevlnum != v:lnum - 1 || l:prevline !~# '\\$'
-                " previous line does not continue
-                let l:indent -= &shiftwidth
-            endif
+    if getline(l:prevlnum - 1) !~# '\\$'
+        " previous line is not a continued line
+        if l:prevlnum == v:lnum - 1 && l:prevline =~# '\\$'
+            " this line is a first continued line
+            let l:indent += &shiftwidth
+        endif
+    else
+        " previous line is a continued line
+        if l:prevlnum != v:lnum - 1 || l:prevline !~# '\\$'
+            " previous line does not continue
+            let l:indent -= &shiftwidth
         endif
     endif
     return indent(l:prevlnum) + l:indent
